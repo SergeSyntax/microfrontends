@@ -15,21 +15,23 @@ const generateClassName = createGenerateClassName({
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   return (
-    <StylesProvider generateClassName={generateClassName}>
-      <BrowserRouter>
-        <Header isSignedIn={isSignedIn} onSignOut={() => setIsSignedIn(false)} />
-        <Suspense fallback={<Progress />}>
-          <Switch>
-            <Route path="/auth">
-              <AuthLazy onSignIn={() => setIsSignedIn(true)} />
-            </Route>
-            <Route path="/">
-              <MarketingLazy />
-            </Route>
-          </Switch>
-        </Suspense>
-      </BrowserRouter>
-    </StylesProvider>
+    <BrowserRouter>
+      <StylesProvider generateClassName={generateClassName}>
+        <div>
+          <Header isSignedIn={isSignedIn} onSignOut={() => setIsSignedIn(false)} />
+          <Suspense fallback={<Progress />}>
+            <Switch>
+              <Route path="/auth">
+                <AuthLazy onSignIn={() => setIsSignedIn(true)} />
+              </Route>
+              <Route path="/">
+                <MarketingLazy />
+              </Route>
+            </Switch>
+          </Suspense>
+        </div>
+      </StylesProvider>
+    </BrowserRouter>
   );
 }
 
