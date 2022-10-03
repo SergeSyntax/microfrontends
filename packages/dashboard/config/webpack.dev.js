@@ -4,9 +4,6 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 const commonConfig = require('./webpack.common');
 const packageJson = require('../package.json');
 
-/**
- * @type {import('webpack').Configuration}
- */
 const devConfig = {
   mode: 'development',
   output: {
@@ -15,7 +12,7 @@ const devConfig = {
   devServer: {
     port: 8083,
     historyApiFallback: {
-      index: '/index.html',
+      index: 'index.html',
     },
     headers: {
       'Access-Control-Allow-Origin': '*',

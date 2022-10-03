@@ -1,6 +1,9 @@
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
-import { StylesProvider, createGenerateClassName } from '@material-ui/core';
+import {
+  StylesProvider,
+  createGenerateClassName,
+} from '@material-ui/core/styles';
 import { createBrowserHistory } from 'history';
 
 import Progress from './components/Progress';
@@ -16,35 +19,37 @@ const generateClassName = createGenerateClassName({
 
 const history = createBrowserHistory();
 
-function App() {
+export default () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
 
   useEffect(() => {
-    if (isSignedIn) history.push('/dashboard');
+    if (isSignedIn) {
+      history.push('/dashboard');
+    }
   }, [isSignedIn]);
 
   return (
-    <StylesProvider generateClassName={generateClassName}>
-      <Router history={history}>
+    <Router history={history}>
+      <StylesProvider generateClassName={generateClassName}>
         <div>
-          <Header isSignedIn={isSignedIn} onSignOut={() => setIsSignedIn(false)} />
+          <Header
+            onSignOut={() => setIsSignedIn(false)}
+            isSignedIn={isSignedIn}
+          />
           <Suspense fallback={<Progress />}>
             <Switch>
-              <Route path="/auth"></Route>
+              <Route path="/auth">
+                <AuthLazy onSignIn={() => setIsSignedIn(true)} />
+              </Route>
               <Route path="/dashboard">
-                {!isSignedIn && <Redirect path="/" />}
+                {!isSignedIn && <Redirect to="/" />}
                 <DashboardLazy />
               </Route>
-              <AuthLazy onSignIn={() => setIsSignedIn(true)} />
-              <Route path="/">
-                <MarketingLazy />
-              </Route>
+              <Route path="/" component={MarketingLazy} />
             </Switch>
           </Suspense>
         </div>
-      </Router>
-    </StylesProvider>
+      </StylesProvider>
+    </Router>
   );
-}
-
-export default App;
+};
